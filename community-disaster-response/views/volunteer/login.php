@@ -7,8 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Login</title>
-    <link rel="stylesheet" href="../../assets/css/main.css">
-    <link rel="stylesheet" href="../../assets/css/volunteer.css">
+    <link rel="stylesheet" href="../../assets/css/main.css?v=1.0.1">
+    <link rel="stylesheet" href="../../assets/css/volunteer.css?v=1.0.1">
 </head>
 <body>
     <header>
@@ -16,6 +16,7 @@
     </header>
 
     <main>
+        <img src="../../assets/bg2.jpg" alt="Community Disaster Response" style="width: 100%; height: 100%; object-fit: cover; position:fixed; top: 0; left: 0; z-index: -1;opacity: 0.5; filter: blur(10px); ">
         <div class="login-container">
             <div class="login-card">
                 <h2>Volunteer Login</h2>
@@ -53,7 +54,7 @@
                     <h3>Verify OTP</h3>
                     <div class="form-group">
                         <label for="forgot_otp_email">Email</label>
-                        <input type="email" id="forgot_otp_email" readonly>
+                        <input hidden type="email" id="forgot_otp_email" readonly>
                     </div>
                     <div class="form-group">
                         <label for="forgot_otp">Enter OTP</label>
@@ -96,9 +97,10 @@
     <footer>
         <p>&copy; <?php echo date('Y'); ?> Community Disaster Response</p>
     </footer>
-
+    <!-- SweetAlert v1 from CDN -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../../assets/libs/sweetalert.min.js"></script>
-    <script src="../../assets/js/volunteer.js"></script>
+    <script src="../../assets/js/volunteer.js?v=1.0.1"></script>
     
 </body>
 </html>

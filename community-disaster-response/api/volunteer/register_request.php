@@ -18,15 +18,17 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input = json_decode(file_get_contents('php://input'), true);
 
-$username    = isset($input['username']) ? trim($input['username']) : '';
-$password    = isset($input['password']) ? $input['password'] : '';
-$email       = isset($input['email']) ? trim($input['email']) : '';
-$full_name   = isset($input['full_name']) ? trim($input['full_name']) : '';
-$skills      = isset($input['skills']) ? trim($input['skills']) : '';
+$username     = isset($input['username']) ? trim($input['username']) : '';
+$password     = isset($input['password']) ? $input['password'] : '';
+$email        = isset($input['email']) ? trim($input['email']) : '';
+$full_name    = isset($input['full_name']) ? trim($input['full_name']) : '';
+$skills       = isset($input['skills']) ? trim($input['skills']) : '';
 $availability = isset($input['availability']) ? trim($input['availability']) : '';
+$gender       = isset($input['gender']) ? trim($input['gender']) : '';
+$birthday     = isset($input['birthday']) ? trim($input['birthday']) : '';
 
 // Basic validation
-if ($username === '' || $password === '' || $email === '' || $full_name === '' || $skills === '' || $availability === '') {
+if ($username === '' || $password === '' || $email === '' || $full_name === '' || $skills === '' || $availability === '' || $gender === '' || $birthday === '') {
     echo json_encode([
         'status' => 'error',
         'message' => 'All fields are required',
@@ -39,6 +41,43 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     echo json_encode([
         'status' => 'error',
         'message' => 'Invalid email format',
+        'data' => []
+    ]);
+    exit;
+}
+
+// Normalize gender
+$genderLower = strtolower($gender);
+if ($genderLower === 'male') {
+    $gender = 'Male';
+} elseif ($genderLower === 'female') {
+    $gender = 'Female';
+} else {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Invalid gender value',
+        'data' => []
+    ]);
+    exit;
+}
+
+// Birthday / age validation (must be at least 18)
+$birthdayDate = DateTime::createFromFormat('Y-m-d', $birthday);
+if (!$birthdayDate) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Invalid birthday format',
+        'data' => []
+    ]);
+    exit;
+}
+$today = new DateTime();
+$ageDiff = $today->diff($birthdayDate);
+$age = (int)$ageDiff->y;
+if ($age < 18) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'You must be at least 18 years old to register as a volunteer.',
         'data' => []
     ]);
     exit;
@@ -105,15 +144,15 @@ $otp = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 $expires = (new DateTime('+10 minutes'))->format('Y-m-d H:i:s');
 
 $stmt = $conn->prepare('
-    INSERT INTO volunteer_pending_registrations (email, username, password_hash, full_name, skills, availability, otp_code, otp_expires_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO volunteer_pending_registrations (email, username, password_hash, full_name, skills, availability, gender, birthday, age, otp_code, otp_expires_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ');
 if (!$stmt) {
     http_response_code(500);
     echo json_encode(['status' => 'error', 'message' => 'Failed to prepare insert', 'data' => []]);
     exit;
 }
-$stmt->bind_param('ssssssss', $email, $username, $password_hash, $full_name, $skills, $availability, $otp, $expires);
+$stmt->bind_param('ssssssssiss', $email, $username, $password_hash, $full_name, $skills, $availability, $gender, $birthday, $age, $otp, $expires);
 
 if (!$stmt->execute()) {
     $stmt->close();

@@ -32,6 +32,7 @@ if (!isset($_SESSION['volunteer_id'])) {
     </header>
 
     <main>
+        <img src="../../assets/main.webp" alt="Community Disaster Response" style="width: 100%; height: 100%; object-fit: cover; position:fixed; top: 0; left: 0; z-index: -1; opacity: 0.5; filter: blur(10px); ">
         <div style="margin-bottom: 1rem;">
             <p>Welcome, <strong><?php echo htmlspecialchars($_SESSION['volunteer_name']); ?></strong></p>
             <p>View active emergencies and help requests. Click "I'll Help" to commit to assisting.</p>
@@ -46,7 +47,8 @@ if (!isset($_SESSION['volunteer_id'])) {
     <footer>
         <p>&copy; <?php echo date('Y'); ?> Community Disaster Response</p>
     </footer>
-
+    <!-- SweetAlert v1 from CDN -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../../assets/libs/sweetalert.min.js"></script>
     <script src="../../assets/js/volunteer.js"></script>
 </body>

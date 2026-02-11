@@ -7,8 +7,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Registration</title>
-    <link rel="stylesheet" href="../../assets/css/main.css">
-    <link rel="stylesheet" href="../../assets/css/volunteer.css">
+    <link rel="stylesheet" href="../../assets/css/main.css?v=1.0.1">
+    <link rel="stylesheet" href="../../assets/css/volunteer.css?v=1.0.1">
+    <!-- SweetAlert v1 from CDN -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 <body>
     <header>
@@ -16,6 +18,7 @@
     </header>
 
     <main>
+        <img src="../../assets/bg2.jpg" alt="Community Disaster Response" style="width: 100%; height: 100%; object-fit: cover; position:fixed; top: 0; left: 0; z-index: -1; opacity: 0.5; filter: blur(10px); ">
         <div class="register-container">
             <div class="register-card">
                 <h2>Volunteer Registration</h2>
@@ -41,6 +44,18 @@
                     <div class="form-group">
                         <label for="reg_full_name">Full Name</label>
                         <input type="text" id="reg_full_name" name="full_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg_gender">Gender</label>
+                        <select id="reg_gender" name="gender" required>
+                            <option value="">Select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg_birthday">Birthday</label>
+                        <input type="date" id="reg_birthday" name="birthday" required>
                     </div>
                     <div class="form-group">
                         <label for="reg_skills">Skills</label>

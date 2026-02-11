@@ -11,8 +11,8 @@ if (!isset($_SESSION['admin_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/main.css?v=1.0.1">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=1.0.1">
 </head>
 <body>
     <header>
@@ -22,10 +22,12 @@ if (!isset($_SESSION['admin_id'])) {
         </div>
     </header>
 
-    <main>
-        <div style="margin-bottom: 1rem;">
-            <p>Welcome, <strong><?php echo htmlspecialchars($_SESSION['admin_username']); ?></strong></p>
-        </div>
+    <main style="padding-top: 1rem;">
+        
+        <img src="../assets/bg2.jpg" alt="Community Disaster Response" style="width: 100%; height: 100%; object-fit: cover; position:fixed; top: 0; left: 0; z-index: -1; opacity: 0.5; filter: blur(10px); ">
+        <!-- <div style="margin-bottom: 1rem;">
+            <p>Welcome, <strong>?php echo htmlspecialchars($_SESSION['admin_username']); ?></strong></p>
+        </div> -->
 
         <button class="mobile-sidebar-toggle" id="mobileSidebarToggle">☰ Menu</button>
         <div class="mobile-sidebar" id="mobileSidebar">
@@ -219,7 +221,8 @@ if (!isset($_SESSION['admin_id'])) {
     <footer>
         <p>&copy; <?php echo date('Y'); ?> Community Disaster Response</p>
     </footer>
-
+    <!-- SweetAlert v1 from CDN -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../assets/libs/sweetalert.min.js"></script>
     <script src="../assets/js/admin.js"></script>
 </body>

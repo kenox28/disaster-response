@@ -17,15 +17,31 @@ require_once __DIR__ . '/../../config/db.php';
 
 $volunteerId = (int) $_SESSION['volunteer_id'];
 
-// Fetch basic volunteer info including totals
+// Fetch basic volunteer info including totals and profile details
 $info = null;
-$stmt = $conn->prepare('SELECT id, full_name, skills, availability, username, email, status, profile_picture, total_emergency_help, total_help_requests FROM volunteers WHERE id = ?');
+$stmt = $conn->prepare('SELECT id, full_name, skills, availability, username, email, gender, birthday, age, status, profile_picture, total_emergency_help, total_help_requests FROM volunteers WHERE id = ?');
 if ($stmt) {
     $stmt->bind_param('i', $volunteerId);
     $stmt->execute();
     $result = $stmt->get_result();
     $info = $result->fetch_assoc();
     $stmt->close();
+}
+
+// Compute age from birthday (always authoritative)
+if ($info && !empty($info['birthday'])) {
+    try {
+        $bday = new DateTime($info['birthday']);
+        $today = new DateTime('today');
+        $ageObj = $today->diff($bday);
+        $computedAge = (int)$ageObj->y;
+        $info['age'] = $computedAge;
+    } catch (Exception $e) {
+        // If parsing fails, keep existing age value or 0
+        $info['age'] = isset($info['age']) ? (int)$info['age'] : 0;
+    }
+} elseif ($info) {
+    $info['age'] = isset($info['age']) ? (int)$info['age'] : 0;
 }
 
 // Achievements based on totals from volunteers table and history

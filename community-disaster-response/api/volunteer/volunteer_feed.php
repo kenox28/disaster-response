@@ -27,6 +27,7 @@ $stmt = $conn->prepare("
         er.description,
         er.status,
         er.created_at,
+        er.image_path,
         COUNT(va.id) AS assigned_count,
         MAX(CASE WHEN va.volunteer_id = ? THEN 1 ELSE 0 END) AS is_assigned
     FROM emergency_reports er
@@ -49,6 +50,8 @@ if ($stmt) {
             'description' => $row['description'],
             'status' => $row['status'],
             'created_at' => $row['created_at'],
+            'image_path' => $row['image_path'],
+            'image_url' => $row['image_path'] ? '../../' . $row['image_path'] : '',
             'assigned_count' => (int)$row['assigned_count'],
             'is_assigned' => (bool)$row['is_assigned']
         ];
@@ -65,6 +68,7 @@ $stmt = $conn->prepare("
         hr.description,
         hr.status,
         hr.created_at,
+        hr.image_path,
         COUNT(va.id) AS assigned_count,
         MAX(CASE WHEN va.volunteer_id = ? THEN 1 ELSE 0 END) AS is_assigned
     FROM help_requests hr
@@ -86,6 +90,8 @@ if ($stmt) {
             'description' => $row['description'],
             'status' => $row['status'],
             'created_at' => $row['created_at'],
+            'image_path' => $row['image_path'],
+            'image_url' => $row['image_path'] ? '../../' . $row['image_path'] : '',
             'assigned_count' => (int)$row['assigned_count'],
             'is_assigned' => (bool)$row['is_assigned']
         ];

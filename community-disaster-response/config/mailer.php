@@ -44,33 +44,30 @@ function cdr_send_mail(string $toEmail, string $toName, string $subject, string 
     }
 
     try {
-        // PHPMailer class is loaded dynamically by cdr_load_phpmailer()
-        $class = 'PHPMailer\\PHPMailer\\PHPMailer';
-        $mail = new $class(true);
+        $mail = new PHPMailer\PHPMailer\PHPMailer(true);
 
-        // ===== SMTP CONFIG (EDIT THESE) =====
-        // For school projects using Gmail, you may need an App Password.
-        // $mail->isSMTP();
-        // $mail->Host = 'smtp.gmail.com';
-        // $mail->SMTPAuth = true;
-        // $mail->Username = 'your-email@gmail.com';
-        // $mail->Password = 'your-app-password';
-        // $mail->SMTPSecure = $class::ENCRYPTION_STARTTLS;
-        // $mail->Port = 587;
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'ebakunado.linaohealthcenter@gmail.com';
+        $mail->Password = 'yhfd becn tywa ncyy';
+        $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS; // Changed to SMTPS for port 465
+        $mail->Port = 465;
+        
+        $mail->CharSet = 'UTF-8';
 
-        // If you have a local SMTP server, configure it above.
-
-        $mail->setFrom('no-reply@example.com', 'Community Disaster Response');
+        $mail->setFrom('ebakunado.linaohealthcenter@gmail.com', 'Community Disaster Response');
         $mail->addAddress($toEmail, $toName);
+
         $mail->isHTML(true);
         $mail->Subject = $subject;
         $mail->Body = $htmlBody;
-        $mail->AltBody = $textBody !== '' ? $textBody : strip_tags($htmlBody);
+        $mail->AltBody = $textBody ?: strip_tags($htmlBody);
 
         $mail->send();
+
         return ['ok' => true];
     } catch (Exception $e) {
         return ['ok' => false, 'error' => $e->getMessage()];
     }
 }
-

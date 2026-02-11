@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Disaster Response</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/main.css?v=1.0.2">
 </head>
 <body>
     <header>
@@ -28,12 +28,13 @@
             <a href="index.php">Home</a>
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
-            <a href="volunteer/login.php" style="font-size:0.5rem">Volunteer Login</a>
+            <a href="volunteer/login.php">Volunteer Login</a>
             <a href="admin_login.php">Admin Login</a>
         </nav>
     </header>
 
     <main>
+        <img src="../assets/bg2.jpg" alt="Community Disaster Response" style="width: 100%; height: 100%; object-fit: cover; position:fixed; top: 0; left: 0; z-index: -1; opacity: 0.5; filter: blur(10px); ">
         <!-- Emergency Report / Request Help - Quick actions -->
         <section class="hero">
             <div class="hero-content">
@@ -51,7 +52,7 @@
 
         <!-- Real-Time Weather Forecast (Philippines) -->
         <section class="section weather-panel" id="weatherPanel">
-            <h2>Live Weather – Philippines (Metro Manila)</h2>
+            <h2>Live Weather – Philippines </h2>
             <div class="card weather-card">
                 <div id="weatherForecastContainer">
                     <p>Loading weather data...</p>
@@ -74,7 +75,7 @@
         <section class="section" id="reportEmergency">
             <div class="card">
                 <h2>Report Emergency</h2>
-                <form id="reportEmergencyForm">
+                <form id="reportEmergencyForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="location">Location:</label>
                         <input type="text" id="location" name="location" required>
@@ -93,6 +94,21 @@
                         <label for="description">Description:</label>
                         <textarea id="description" name="description" required></textarea>
                     </div>
+                    <div class="form-group">
+                        <label for="emergency_photo">Photo (optional, JPG/PNG, max 2MB):</label>
+                        <div class="file-upload" id="emergencyPhotoWrapper">
+                            <div class="file-upload-placeholder">
+                                <span class="file-upload-icon">📷</span>
+                                <div class="file-upload-text-group">
+                                    <span class="file-upload-title">Click to upload image</span>
+                                    <span class="file-upload-subtitle">Supported formats: JPG, PNG (max 2MB)</span>
+                                    <span class="file-upload-filename" id="emergencyPhotoFilename"></span>
+                                </div>
+                            </div>
+                            <div class="file-upload-preview" id="emergencyPhotoPreview"></div>
+                            <input type="file" id="emergency_photo" name="photo" accept="image/jpeg,image/png">
+                        </div>
+                    </div>
                     <button type="submit" class="button button-primary button-block">Submit Emergency Report</button>
                 </form>
                 <div id="reportEmergencyMessage"></div>
@@ -100,10 +116,12 @@
         </section>
 
         <!-- Request Help Form -->
+        <!-- UPDATED REQUEST HELP SECTION - Copy and paste this to replace your existing Request Help section -->
+
         <section class="section" id="requestHelp">
             <div class="card">
                 <h2>Request Help</h2>
-                <form id="requestHelpForm">
+                <form id="requestHelpForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="help_type">Help Type:</label>
                         <select id="help_type" name="help_type" required>
@@ -118,6 +136,24 @@
                         <label for="help_description">Description:</label>
                         <textarea id="help_description" name="help_description" required></textarea>
                     </div>
+                    
+                    <!-- UPDATED PHOTO UPLOAD SECTION -->
+                    <div class="form-group">
+                        <label for="help_photo">Photo (optional, JPG/PNG, max 2MB):</label>
+                        <div class="file-upload" id="helpPhotoWrapper">
+                            <div class="file-upload-placeholder">
+                                <span class="file-upload-icon">📷</span>
+                                <div class="file-upload-text-group">
+                                    <span class="file-upload-title">Click to upload image</span>
+                                    <span class="file-upload-subtitle">Supported formats: JPG, PNG (max 2MB)</span>
+                                    <span class="file-upload-filename" id="helpPhotoFilename"></span>
+                                </div>
+                            </div>
+                            <div class="file-upload-preview" id="helpPhotoPreview"></div>
+                            <input type="file" id="help_photo" name="photo" accept="image/jpeg,image/png">
+                        </div>
+                    </div>
+                    
                     <button type="submit" class="button button-primary button-block">Submit Help Request</button>
                 </form>
                 <div id="requestHelpMessage"></div>
@@ -238,7 +274,8 @@
             <a href="admin_login.php">Admin Portal</a>
         </p>
     </footer>
-
-    <script src="../assets/js/main.js"></script>
+    <!-- SweetAlert v1 from CDN -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../assets/js/main.js?v=1.0.3"></script>
 </body>
 </html>

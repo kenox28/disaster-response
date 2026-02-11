@@ -41,9 +41,11 @@ $conn->query("
         emergency_type VARCHAR(100) NOT NULL,
         description TEXT NOT NULL,
         status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+        image_path VARCHAR(255) DEFAULT '',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
+@$conn->query("ALTER TABLE emergency_reports ADD COLUMN image_path VARCHAR(255) DEFAULT ''");
 
 // Help requests
 $conn->query("
@@ -52,9 +54,11 @@ $conn->query("
         help_type VARCHAR(100) NOT NULL,
         description TEXT NOT NULL,
         status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+        image_path VARCHAR(255) DEFAULT '',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
+@$conn->query("ALTER TABLE help_requests ADD COLUMN image_path VARCHAR(255) DEFAULT ''");
 
 // Volunteers
 $conn->query("
@@ -67,6 +71,9 @@ $conn->query("
         password_hash VARCHAR(255),
         email VARCHAR(255),
         profile_picture VARCHAR(255),
+        gender VARCHAR(20),
+        birthday DATE,
+        age TINYINT UNSIGNED DEFAULT 0,
         total_emergency_help INT DEFAULT 0,
         total_help_requests INT DEFAULT 0,
         status ENUM('Pending','Approved','Rejected') NOT NULL DEFAULT 'Pending',
@@ -79,6 +86,9 @@ $conn->query("
 @$conn->query("ALTER TABLE volunteers ADD COLUMN password_hash VARCHAR(255)");
 @$conn->query("ALTER TABLE volunteers ADD COLUMN email VARCHAR(255)");
 @$conn->query("ALTER TABLE volunteers ADD COLUMN profile_picture VARCHAR(255)");
+@$conn->query("ALTER TABLE volunteers ADD COLUMN gender VARCHAR(20)");
+@$conn->query("ALTER TABLE volunteers ADD COLUMN birthday DATE");
+@$conn->query("ALTER TABLE volunteers ADD COLUMN age TINYINT UNSIGNED DEFAULT 0");
 @$conn->query("ALTER TABLE volunteers ADD COLUMN total_emergency_help INT DEFAULT 0");
 @$conn->query("ALTER TABLE volunteers ADD COLUMN total_help_requests INT DEFAULT 0");
 @$conn->query("ALTER TABLE volunteers MODIFY COLUMN status ENUM('Pending','Approved','Rejected') NOT NULL DEFAULT 'Pending'");
@@ -140,13 +150,14 @@ $conn->query("
         full_name VARCHAR(255) NOT NULL,
         skills VARCHAR(255) NOT NULL,
         availability VARCHAR(255) NOT NULL,
+        gender VARCHAR(20) NOT NULL,
+        birthday DATE NOT NULL,
+        age TINYINT UNSIGNED NOT NULL,
         otp_code VARCHAR(10) NOT NULL,
         otp_expires_at DATETIME NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
-
-// Password reset OTPs
 $conn->query("
     CREATE TABLE IF NOT EXISTS volunteer_password_resets (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
