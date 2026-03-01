@@ -1,9 +1,9 @@
 <?php
 // Database connection using MySQLi
-$db_host = 'localhost';
-$db_user = 'root';
-$db_pass = '';
-$db_name = 'community_disaster_response'; // Change to your actual DB name
+$db_host = 'sql103.infinityfree.com';
+$db_user = 'if0_41137646';
+$db_pass = 'mUQ8tJCSFi';
+$db_name = 'if0_41137646_cdr'; // Change to your actual DB name
 
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -21,9 +21,9 @@ if ($conn->connect_error) {
 // Set charset
 $conn->set_charset('utf8mb4');
 
-// Auto-create tables if they do not exist
-
-// Admins table
+// ==========================
+// ADMINS
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS admins (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -33,7 +33,9 @@ $conn->query("
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
-// Emergency reports
+// ==========================
+// EMERGENCY REPORTS
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS emergency_reports (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -45,9 +47,10 @@ $conn->query("
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
-@$conn->query("ALTER TABLE emergency_reports ADD COLUMN image_path VARCHAR(255) DEFAULT ''");
 
-// Help requests
+// ==========================
+// HELP REQUESTS
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS help_requests (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -58,9 +61,10 @@ $conn->query("
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
-@$conn->query("ALTER TABLE help_requests ADD COLUMN image_path VARCHAR(255) DEFAULT ''");
 
-// Volunteers
+// ==========================
+// VOLUNTEERS
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS volunteers (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -81,19 +85,9 @@ $conn->query("
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
-// Ensure new volunteer columns exist in case table was created earlier
-@$conn->query("ALTER TABLE volunteers ADD COLUMN username VARCHAR(100) UNIQUE");
-@$conn->query("ALTER TABLE volunteers ADD COLUMN password_hash VARCHAR(255)");
-@$conn->query("ALTER TABLE volunteers ADD COLUMN email VARCHAR(255)");
-@$conn->query("ALTER TABLE volunteers ADD COLUMN profile_picture VARCHAR(255)");
-@$conn->query("ALTER TABLE volunteers ADD COLUMN gender VARCHAR(20)");
-@$conn->query("ALTER TABLE volunteers ADD COLUMN birthday DATE");
-@$conn->query("ALTER TABLE volunteers ADD COLUMN age TINYINT UNSIGNED DEFAULT 0");
-@$conn->query("ALTER TABLE volunteers ADD COLUMN total_emergency_help INT DEFAULT 0");
-@$conn->query("ALTER TABLE volunteers ADD COLUMN total_help_requests INT DEFAULT 0");
-@$conn->query("ALTER TABLE volunteers MODIFY COLUMN status ENUM('Pending','Approved','Rejected') NOT NULL DEFAULT 'Pending'");
-
-// Donations
+// ==========================
+// DONATIONS
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS donations (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -105,7 +99,9 @@ $conn->query("
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
-// Alerts
+// ==========================
+// ALERTS
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS alerts (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -116,7 +112,9 @@ $conn->query("
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
-// Evacuation centers (status: Available, Full, Closed)
+// ==========================
+// EVACUATION CENTERS
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS evacuation_centers (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -127,7 +125,9 @@ $conn->query("
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
-// Preparedness guides
+// ==========================
+// PREPAREDNESS GUIDES
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS preparedness_guides (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -137,10 +137,10 @@ $conn->query("
         is_archived TINYINT(1) DEFAULT 0
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
-@$conn->query("ALTER TABLE preparedness_guides ADD COLUMN category VARCHAR(100)");
-@$conn->query("ALTER TABLE preparedness_guides ADD COLUMN is_archived TINYINT(1) DEFAULT 0");
 
-// Pending volunteer registrations for OTP verification
+// ==========================
+// VOLUNTEER PENDING REGISTRATIONS
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS volunteer_pending_registrations (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -159,6 +159,10 @@ $conn->query("
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
+
+// ==========================
+// VOLUNTEER PASSWORD RESETS
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS volunteer_password_resets (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -169,7 +173,9 @@ $conn->query("
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
-// Volunteer history
+// ==========================
+// VOLUNTEER HISTORY
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS volunteer_history (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -183,7 +189,9 @@ $conn->query("
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
-// Volunteer assignments (track which volunteers commit to help)
+// ==========================
+// VOLUNTEER ASSIGNMENTS
+// ==========================
 $conn->query("
     CREATE TABLE IF NOT EXISTS volunteer_assignments (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -197,5 +205,3 @@ $conn->query("
         UNIQUE KEY unique_assignment (volunteer_id, request_type, request_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
-
-
