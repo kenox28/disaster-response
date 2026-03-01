@@ -78,7 +78,7 @@ if (!$stmt) {
     echo json_encode(['status' => 'error', 'message' => 'Failed to prepare insert', 'data' => []]);
     exit;
 }
-$stmt->bind_param('ssssssssii', $username, $passwordHash, $email, $fullName, $skills, $availability, $gender, $birthday, $age, $status);
+$stmt->bind_param('ssssssssis', $username, $passwordHash, $email, $fullName, $skills, $availability, $gender, $birthday, $age, $status);
 if (!$stmt->execute()) {
     $stmt->close();
     http_response_code(500);

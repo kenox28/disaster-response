@@ -23,7 +23,7 @@
             <div class="register-card">
                 <h2>Volunteer Registration</h2>
                 <!-- Step 1: Registration form -->
-                <form id="volunteerRegisterForm">
+                <form id="volunteerRegisterForm" method="POST">
                     <div class="form-group">
                         <label for="reg_username">Username</label>
                         <input type="text" id="reg_username" name="username" required>
@@ -71,8 +71,8 @@
                 <!-- Step 2: OTP verification form -->
                 <form id="volunteerOtpForm" style="display:none; margin-top:1rem;">
                     <div class="form-group">
-                        <label for="otp_email">Email</label>
-                        <input type="email" id="otp_email" name="email" readonly>
+                        <!-- <label for="otp_email">Email</label> -->
+                        <input  type="hidden" id="otp_email" name="email" readonly >
                     </div>
                     <div class="form-group">
                         <label for="otp_code">Enter OTP sent to your email</label>

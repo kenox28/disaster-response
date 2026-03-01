@@ -155,6 +155,7 @@ $conn->query("
         age TINYINT UNSIGNED NOT NULL,
         otp_code VARCHAR(10) NOT NULL,
         otp_expires_at DATETIME NOT NULL,
+        status ENUM('Pending','Approved','Rejected') NOT NULL DEFAULT 'Pending',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");

@@ -92,7 +92,7 @@ if (strlen($username) < 3) {
     exit;
 }
 
-// Password strength: at least 8 chars, one number, one special character
+// Password strength
 if (strlen($password) < 8 || !preg_match('/[0-9]/', $password) || !preg_match('/[^A-Za-z0-9]/', $password)) {
     echo json_encode([
         'status' => 'error',
@@ -102,15 +102,27 @@ if (strlen($password) < 8 || !preg_match('/[0-9]/', $password) || !preg_match('/
     exit;
 }
 
-// Check existing username/email in volunteers
+// Check existing username/email
 $stmt = $conn->prepare('SELECT id FROM volunteers WHERE username = ? LIMIT 1');
 if (!$stmt) {
     http_response_code(500);
-    echo json_encode(['status' => 'error', 'message' => 'Failed to prepare statement', 'data' => []]);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Prepare failed (username check): ' . $conn->error,
+        'data' => []
+    ]);
     exit;
 }
 $stmt->bind_param('s', $username);
-$stmt->execute();
+if (!$stmt->execute()) {
+    http_response_code(500);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Execute failed (username check): ' . $stmt->error,
+        'data' => []
+    ]);
+    exit;
+}
 $res = $stmt->get_result();
 if ($res->num_rows > 0) {
     $stmt->close();
@@ -120,8 +132,25 @@ if ($res->num_rows > 0) {
 $stmt->close();
 
 $stmt = $conn->prepare('SELECT id FROM volunteers WHERE email = ? LIMIT 1');
+if (!$stmt) {
+    http_response_code(500);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Prepare failed (email check): ' . $conn->error,
+        'data' => []
+    ]);
+    exit;
+}
 $stmt->bind_param('s', $email);
-$stmt->execute();
+if (!$stmt->execute()) {
+    http_response_code(500);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Execute failed (email check): ' . $stmt->error,
+        'data' => []
+    ]);
+    exit;
+}
 $res = $stmt->get_result();
 if ($res->num_rows > 0) {
     $stmt->close();
@@ -130,26 +159,41 @@ if ($res->num_rows > 0) {
 }
 $stmt->close();
 
-// Also check pending registrations
+// Delete any pending registration
 $stmt = $conn->prepare('DELETE FROM volunteer_pending_registrations WHERE email = ?');
+if (!$stmt) {
+    http_response_code(500);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Prepare failed (delete pending): ' . $conn->error,
+        'data' => []
+    ]);
+    exit;
+}
 $stmt->bind_param('s', $email);
 $stmt->execute();
 $stmt->close();
 
-// Hash password for storage in pending table
+// Hash password
 $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
 // Generate OTP
 $otp = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 $expires = (new DateTime('+10 minutes'))->format('Y-m-d H:i:s');
 
+// Insert pending registration with debug info
 $stmt = $conn->prepare('
-    INSERT INTO volunteer_pending_registrations (email, username, password_hash, full_name, skills, availability, gender, birthday, age, otp_code, otp_expires_at)
+    INSERT INTO volunteer_pending_registrations 
+    (email, username, password_hash, full_name, skills, availability, gender, birthday, age, otp_code, otp_expires_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ');
 if (!$stmt) {
     http_response_code(500);
-    echo json_encode(['status' => 'error', 'message' => 'Failed to prepare insert', 'data' => []]);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Prepare failed (insert): ' . $conn->error,
+        'data' => []
+    ]);
     exit;
 }
 $stmt->bind_param('ssssssssiss', $email, $username, $password_hash, $full_name, $skills, $availability, $gender, $birthday, $age, $otp, $expires);
@@ -157,12 +201,16 @@ $stmt->bind_param('ssssssssiss', $email, $username, $password_hash, $full_name, 
 if (!$stmt->execute()) {
     $stmt->close();
     http_response_code(500);
-    echo json_encode(['status' => 'error', 'message' => 'Failed to save registration request', 'data' => []]);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Execute failed (insert): ' . $stmt->error,
+        'data' => []
+    ]);
     exit;
 }
 $stmt->close();
 
-// Send OTP via PHPMailer
+// Send OTP
 $send = cdr_send_mail(
     $email,
     $full_name,
@@ -184,4 +232,3 @@ echo json_encode([
     'message' => 'OTP sent to your email. Please enter it to complete registration.',
     'data' => ['email' => $email]
 ]);
-

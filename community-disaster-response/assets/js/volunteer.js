@@ -75,7 +75,8 @@ function initVolunteerLogin() {
 		var email_or_username = document.getElementById("email_or_username").value;
 		var password = document.getElementById("password").value;
 		var submitBtn =
-			form.querySelector('button[type="submit"]') || form.querySelector("button");
+			form.querySelector('button[type="submit"]') ||
+			form.querySelector("button");
 
 		setButtonLoading(submitBtn);
 		try {
@@ -170,7 +171,8 @@ function initVolunteerRegister() {
 		var skills = document.getElementById("reg_skills").value;
 		var availability = document.getElementById("reg_availability").value;
 		var submitBtn =
-			form.querySelector('button[type="submit"]') || form.querySelector("button");
+			form.querySelector('button[type="submit"]') ||
+			form.querySelector("button");
 
 		// Frontend age validation (must be at least 18)
 		if (birthday) {
@@ -219,7 +221,6 @@ function initVolunteerRegister() {
 					data.message ||
 						"Please check your email for the OTP code to complete registration.",
 				);
-				form.reset();
 				var otpForm = document.getElementById("volunteerOtpForm");
 				var otpEmail = document.getElementById("otp_email");
 				if (otpForm && otpEmail) {
@@ -233,7 +234,6 @@ function initVolunteerRegister() {
 					"Registration Failed",
 					data.message || "Unable to register. Please try again.",
 				);
-				form.reset();
 			}
 		} catch (error) {
 			showAlert(
@@ -241,7 +241,6 @@ function initVolunteerRegister() {
 				"Error",
 				"An error occurred during registration. Please try again.",
 			);
-			form.reset();
 		} finally {
 			resetButtonLoading(submitBtn);
 		}
@@ -286,7 +285,6 @@ function initVolunteerRegister() {
 						"OTP Verification Failed",
 						data.message || "Invalid or expired OTP. Please try again.",
 					);
-					otpForm.reset();
 				}
 			} catch (error) {
 				showAlert(
@@ -294,7 +292,6 @@ function initVolunteerRegister() {
 					"Error",
 					"An error occurred while verifying OTP. Please try again.",
 				);
-				otpForm.reset();
 			}
 		});
 	}
@@ -392,7 +389,9 @@ async function loadDashboardData() {
 		if (headerBirthday) headerBirthday.textContent = info.birthday || "";
 		if (headerAge) {
 			var ageVal =
-				typeof info.age === "number" && info.age > 0 ? info.age + " years old" : "";
+				typeof info.age === "number" && info.age > 0
+					? info.age + " years old"
+					: "";
 			headerAge.textContent = ageVal;
 		}
 

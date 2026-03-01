@@ -13,13 +13,63 @@ if (!isset($_SESSION['volunteer_id'])) {
   <title>Volunteer Dashboard</title>
   <link rel="stylesheet" href="../../assets/css/main.css?v=1.0.2">
   <link rel="stylesheet" href="../../assets/css/volunteer.css?v=1.0.4">
-  <link rel="stylesheet" href="../../assets/css/profile.css?v=1.0.2">
+  <link rel="stylesheet" href="../../assets/css/profile.css?v=1.0.3">
 
   <!-- <style>@view-transition { navigation: auto; }</style> -->
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
   <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
  </head>
+ <style>
+    .profile-header-infos{
+        width:65%;
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        background-color: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        color: #000;
+        font-size: 0.8rem;
+    }
+    .profile-header-info-item{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        background-color: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+    .profile-header-info-item label{
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: #000;
+        margin: 0;
+        padding: 0;
+        width: 30%;
+
+    }
+    .profile-header-info-item-content{
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        background-color: #fff;
+    }
+    .profile-header-infos h1{
+        font-size: 1rem;
+        font-weight: 400;
+        color: #111827 !important;
+        margin: 0;
+        padding: 0;
+        width: 50%;
+        text-align: center;
+        text-transform: capitalize;
+    }
+ </style>
  <body>
   <header>
    <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
@@ -59,11 +109,28 @@ if (!isset($_SESSION['volunteer_id'])) {
       <div class="profile-header-info">
        <h2 id="profileHeaderName">Volunteer Name</h2>
       </div>
-      <div class="profile-header-info">
+      <div class="profile-header-infos">
+
+       <div class="profile-header-info-item">
+        <div class="profile-header-info-item-content">
+        <label for="profileHeaderEmail">Email</label>
        <h1 id="profileHeaderEmail">Volunteer Email</h1>
+       </div>
+       <div class="profile-header-info-item-content">
+       <label for="profileHeaderPhone">Gender</label>
        <h1 id="profileHeaderPhone">Volunteer gender</h1>
-       <h1 id="profileHeaderBirthday">Volunteer birthday</h1>
-       <h1 id="profileHeaderAge">Volunteer age</h1>
+       </div>
+        </div>
+        
+        <div class="profile-header-info-item">
+        <div class="profile-header-info-item-content">
+        <label for="profileHeaderBirthday">Birthday</label>
+        <h1 id="profileHeaderBirthday">Volunteer birthday</h1>
+        </div>
+        <div class="profile-header-info-item-content">
+        <label for="profileHeaderAge">Age</label>
+        <h1 id="profileHeaderAge">Volunteer age</h1>
+        </div>
       </div>
      </div><!-- Profile Content Grid -->
      <div class="profile-content-wrapper"><!-- Achievements Section -->
@@ -77,7 +144,7 @@ if (!isset($_SESSION['volunteer_id'])) {
           <div class="achievement-icon">
            🚨
           </div>
-          <p class="achievement-title">Emergency Help</p>
+          <p class="achievement-title">Emergency</p>
           <p class="achievement-count" id="ach_emergency_help">0</p>
          </div>
          <div class="achievement-card">
